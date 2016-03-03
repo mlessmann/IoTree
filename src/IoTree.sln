@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTree.Server", "IoTree.Server/IoTree.Server.csproj", "{4A9897D7-24D6-4D1A-8B21-E2F2E1472A1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTree.Server", "IoTree.Server\IoTree.Server.csproj", "{4A9897D7-24D6-4D1A-8B21-E2F2E1472A1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IoTree.Gpio", "IoTree.Gpio\IoTree.Gpio.csproj", "{88A92877-E66B-42C3-87A4-927ADD3161D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{4A9897D7-24D6-4D1A-8B21-E2F2E1472A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4A9897D7-24D6-4D1A-8B21-E2F2E1472A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4A9897D7-24D6-4D1A-8B21-E2F2E1472A1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88A92877-E66B-42C3-87A4-927ADD3161D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88A92877-E66B-42C3-87A4-927ADD3161D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88A92877-E66B-42C3-87A4-927ADD3161D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88A92877-E66B-42C3-87A4-927ADD3161D2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
