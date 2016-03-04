@@ -25,11 +25,12 @@ namespace IoTree.Server
             return leds;
         }
 
-        public void SetLed(string led, string value)
+        public string SetLed(string led, string value)
         {
             var remoteHost = OperationContext.Current.Channel.RemoteAddress;
             Console.WriteLine("Received SetLed(" + led + ", " + value + ") from " + remoteHost + ".");
             leds[int.Parse(led)] = double.Parse(value);
+            return "Success";
         }
     }
 }

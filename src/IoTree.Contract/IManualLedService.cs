@@ -22,6 +22,6 @@ namespace IoTree.Contract
             RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "setled/{led}/{value}")]
-        void SetLed(string led, string value);
+        string SetLed(string led, string value);
     }
 }

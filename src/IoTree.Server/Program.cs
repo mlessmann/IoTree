@@ -10,7 +10,7 @@ namespace IoTree.Server
 {
     class Program
     {
-        const int DefaultPort = 80;
+        const int DefaultPort = 10733;
 
         static void Main(string[] args)
         {
