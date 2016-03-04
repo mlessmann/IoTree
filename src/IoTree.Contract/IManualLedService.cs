@@ -12,16 +12,14 @@ namespace IoTree.Contract
     {
         [OperationContract]
         [WebGet(
-            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "getleds")]
-        double[] GetLeds();
+        ResponseToken<double[]> GetLeds();
 
         [OperationContract]
         [WebGet(
-            RequestFormat = WebMessageFormat.Json,
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "setled/{led}/{value}")]
-        string SetLed(string led, string value);
+        ResponseToken SetLed(string led, string value);
     }
 }

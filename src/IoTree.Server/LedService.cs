@@ -18,19 +18,31 @@ namespace IoTree.Server
             leds[0] = -1;
         }
 
-        public double[] GetLeds()
+        public ResponseToken<double[]> GetLeds()
         {
-            var remoteHost = OperationContext.Current.Channel.RemoteAddress;
-            Console.WriteLine("Received GetLeds from " + remoteHost + ".");
-            return leds;
+            try
+            {
+                Console.WriteLine("Received GetLeds().");
+                return ResponseToken.CreateOk(leds, "GetLeds");
+            }
+            catch(Exception e)
+            {
+                return ResponseToken.CreateError<double[]>(e, "GetLeds");
+            }
         }
 
-        public string SetLed(string led, string value)
+        public ResponseToken SetLed(string led, string value)
         {
-            var remoteHost = OperationContext.Current.Channel.RemoteAddress;
-            Console.WriteLine("Received SetLed(" + led + ", " + value + ") from " + remoteHost + ".");
-            leds[int.Parse(led)] = double.Parse(value);
-            return "Success";
+            try
+            {
+                Console.WriteLine("Received SetLed(" + led + ", " + value + ").");
+                leds[int.Parse(led)] = double.Parse(value);
+                return ResponseToken.CreateOk("SetLed", led, value);
+            }
+            catch(Exception e)
+            {
+                return ResponseToken.CreateError(e, "SetLed", led, value);
+            }
         }
     }
 }

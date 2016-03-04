@@ -47,6 +47,9 @@
     <Compile Include="..\IoTree.Contract\IManualLedService.cs">
       <Link>ITreeService.cs</Link>
     </Compile>
+    <Compile Include="..\IoTree.Contract\ResponseToken.cs">
+      <Link>ResponseToken.cs</Link>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LedServiceHost.cs" />
