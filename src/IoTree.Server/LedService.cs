@@ -23,11 +23,11 @@ namespace IoTree.Server
             try
             {
                 Console.WriteLine("Received GetLeds().");
-                return ResponseToken.CreateOk(leds, "GetLeds");
+                return ResponseToken.OkData(leds, "GetLeds");
             }
             catch(Exception e)
             {
-                return ResponseToken.CreateError<double[]>(e, "GetLeds");
+                return ResponseToken.ErrorData<double[]>(e, null, "GetLeds");
             }
         }
 
@@ -37,11 +37,11 @@ namespace IoTree.Server
             {
                 Console.WriteLine("Received SetLed(" + led + ", " + value + ").");
                 leds[int.Parse(led)] = double.Parse(value);
-                return ResponseToken.CreateOk("SetLed", led, value);
+                return ResponseToken.Ok("SetLed", led, value);
             }
             catch(Exception e)
             {
-                return ResponseToken.CreateError(e, "SetLed", led, value);
+                return ResponseToken.Error(e, "SetLed", led, value);
             }
         }
     }

@@ -16,7 +16,7 @@ namespace IoTree.Contract
 
         public string ErrorInfo { get; set; }
 
-        public static ResponseToken CreateOk(string method, params string[] methodParameters)
+        public static ResponseToken Ok(string method, params string[] methodParameters)
         {
             return new ResponseToken
             {
@@ -25,7 +25,7 @@ namespace IoTree.Contract
             };
         }
 
-        public static ResponseToken<T> CreateOk<T>(T payload, string method, params string[] methodParameters)
+        public static ResponseToken<T> OkData<T>(T payload, string method, params string[] methodParameters)
         {
             return new ResponseToken<T>
             {
@@ -35,7 +35,7 @@ namespace IoTree.Contract
             };
         }
 
-        public static ResponseToken CreateError(Exception e, string method, params string[] methodParameters)
+        public static ResponseToken Error(Exception e, string method, params string[] methodParameters)
         {
             return new ResponseToken
             {
@@ -45,13 +45,14 @@ namespace IoTree.Contract
             };
         }
 
-        public static ResponseToken<T> CreateError<T>(Exception e, string method, params string[] methodParameters)
+        public static ResponseToken<T> ErrorData<T>(Exception e, T payload, string method, params string[] methodParameters)
         {
             return new ResponseToken<T>
             {
                 Method = FormatMethod(method, methodParameters),
                 StatusCode = HttpStatusCode.InternalServerError,
-                ErrorInfo = e.ToString()
+                ErrorInfo = e.ToString(),
+                Payload = payload
             };
         }
 
