@@ -1,4 +1,7 @@
-﻿using System;
+﻿using NLog;
+using NLog.Config;
+using NLog.Targets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -12,19 +15,53 @@ namespace IoTree.Server
     {
         const int DefaultPort = 10733;
 
+        private static ILogger logger = LogManager.GetCurrentClassLogger();
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Starting IoTree.Server...");
+            ConfigureLogger();
+            logger.Info("Starting IoTree.Server...");
 
-            var host = new LedServiceHost(DefaultPort);
-            host.Start().Wait();
+            try
+            {
+                var host = new LedServiceHost(DefaultPort);
+                host.Start().Wait();
 
-            Console.WriteLine("IoTree.Server started. Press enter to shut it down.");
-            Console.ReadLine();
+                logger.Info("IoTree.Server started. Press enter to shut it down.");
+                Console.ReadLine();
 
-            host.Stop().Wait();
+                host.Stop().Wait();
 
-            Console.WriteLine("IoTree.Server has shut down.");
+                logger.Info("IoTree.Server has shut down.");
+            }
+            catch(Exception e)
+            {
+                logger.Fatal(e, "Exception caught in Main method!");
+            }
+            finally
+            {
+                LogManager.Shutdown();
+            }
+        }
+
+        private static void ConfigureLogger()
+        {
+            var config = new LoggingConfiguration();
+
+            var consoleTarget = new ColoredConsoleTarget();
+            consoleTarget.Layout = "${time} ${message}";
+            var consoleRule = new LoggingRule("*", LogLevel.Debug, consoleTarget);
+
+            var fileTarget = new FileTarget();
+            fileTarget.FileName = "IoTree.Server.log";
+            var fileRule = new LoggingRule("*", LogLevel.Trace, fileTarget);
+
+            config.AddTarget("ConsoleDebugLogger", consoleTarget);
+            config.LoggingRules.Add(consoleRule);
+            config.AddTarget("FileTraceLogger", fileTarget);
+            config.LoggingRules.Add(fileRule);
+
+            LogManager.Configuration = config;
         }
     }
 }

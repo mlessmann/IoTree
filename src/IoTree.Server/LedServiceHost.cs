@@ -1,4 +1,5 @@
 ﻿using IoTree.Contract;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,8 @@ namespace IoTree.Server
 {
     public class LedServiceHost
     {
+        private static ILogger logger = LogManager.GetCurrentClassLogger();
+
         private readonly WebServiceHost host;
         private readonly LedService singletonService;
 
@@ -19,15 +22,19 @@ namespace IoTree.Server
             singletonService = new LedService();
 
             var address = new Uri("http://localhost:" + port);
+            logger.Debug("Creating service host on port {0}.", port);
             host = new WebServiceHost(singletonService, address);
+
+            var manualEndpointAddress = "tree/manual";
+            logger.Debug("Creating service endpoint with IManualLedService contract at {0}.", address + manualEndpointAddress);
             host.AddServiceEndpoint(typeof(IManualLedService), new WebHttpBinding(), "tree/manual");
 
-            host.Closed += (obj, e) => Console.WriteLine("ServiceHost closed.");
-            host.Closing += (obj, e) => Console.WriteLine("ServiceHost closing.");
-            host.Faulted += (obj, e) => Console.WriteLine("ServiceHost faulted!");
-            host.Opened += (obj, e) => Console.WriteLine("ServiceHost opened.");
-            host.Opening += (obj, e) => Console.WriteLine("ServiceHost opening.");
-            host.UnknownMessageReceived += (obj, e) => Console.WriteLine("ServiceHost received unknown message: " + e.Message.ToString());
+            host.Closed += (obj, e) => logger.Debug("ServiceHost closed.");
+            host.Closing += (obj, e) => logger.Debug("ServiceHost closing.");
+            host.Faulted += (obj, e) => logger.Error("ServiceHost faulted!");
+            host.Opened += (obj, e) => logger.Debug("ServiceHost opened.");
+            host.Opening += (obj, e) => logger.Debug("ServiceHost opening.");
+            host.UnknownMessageReceived += (obj, e) => logger.Warn("ServiceHost received unknown message: " + e.Message.ToString());
         }
 
         public Task Start()
