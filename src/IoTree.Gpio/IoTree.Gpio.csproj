@@ -40,15 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GpioException.cs" />
     <Compile Include="GpioManager.cs" />
-    <Compile Include="GpioPin.cs" />
-    <Compile Include="HardwarePwmMode.cs" />
+    <Compile Include="IGpioManager.cs" />
+    <Compile Include="IInputPin.cs" />
+    <Compile Include="Internal\BasePin.cs" />
+    <Compile Include="Internal\InputPin.cs" />
+    <Compile Include="Internal\SoftPwmPin.cs" />
+    <Compile Include="IOutputPin.cs" />
+    <Compile Include="Internal\OutputPin.cs" />
+    <Compile Include="ISoftPwmPin.cs" />
     <Compile Include="PinId.cs" />
-    <Compile Include="PinMode.cs" />
+    <Compile Include="Internal\PinMode.cs" />
     <Compile Include="PinValue.cs" />
     <Compile Include="ResistorMode.cs" />
-    <Compile Include="Wpi.cs" />
+    <Compile Include="Internal\Wpi.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

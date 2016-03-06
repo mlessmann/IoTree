@@ -1,4 +1,6 @@
-﻿using System;
+﻿using IoTree.Gpio.Internal;
+using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,51 +8,102 @@ using System.Threading.Tasks;
 
 namespace IoTree.Gpio
 {
-    /// <summary>
-    /// Handles actions that affect all pins, such as the discovery
-    /// of pins.
-    /// </summary>
-    public class GpioManager
+    public class GpioManager : IGpioManager
     {
-        private readonly GpioPin[] pins;
+        private readonly Dictionary<PinId, IInputPin> inputPins = new Dictionary<PinId, IInputPin>();
+        private readonly Dictionary<PinId, IOutputPin> outputPins = new Dictionary<PinId, IOutputPin>();
+        private readonly Dictionary<PinId, ISoftPwmPin> softPwmPins = new Dictionary<PinId, ISoftPwmPin>();
 
         /// <summary>
-        /// Gets all gpio pins.
+        /// Gets all pins that were initialized as input pins.
         /// </summary>
-        public GpioPin[] Pins { get { return pins; } }
+        public IReadOnlyDictionary<PinId, IInputPin> InputPins { get { return inputPins; } }
 
         /// <summary>
-        /// Initializes and discovers the gpio pins.
+        /// Gets all pins that were initialized as output pins.
+        /// </summary>
+        public IReadOnlyDictionary<PinId, IOutputPin> OutputPins { get { return outputPins; } }
+
+        /// <summary>
+        /// Gets all pins that were initialized as output pins.
+        /// </summary>
+        public IReadOnlyDictionary<PinId, ISoftPwmPin> SoftPwmPins { get { return softPwmPins; } }
+
+        /// <summary>
+        /// Initializes the gpio interface.
         /// </summary>
         public GpioManager()
         {
             Wpi.SetupGpio();
-
-            pins = (from phys in Enumerable.Range(1, 40)
-                    let bcm = Wpi.PhysPinToGpio(phys)
-                    where bcm >= 0 // Filters all non-gpio pins such as ground
-                    select new GpioPin(new PinId(phys, bcm))).ToArray();
         }
 
         /// <summary>
-        /// Discovers all gpio pins and sets them all to the given mode.
+        /// Initializes pins with the given ids for reading.
         /// </summary>
-        /// <param name="mode"></param>
-        public GpioManager(PinMode mode) : this()
+        /// <param name="mode">Sets the resistor mode of the pins.</param>
+        /// <param name="ids">Ids of the pins. If this is empty, all pins will
+        /// be initialized.</param>
+        public void InitializeInputPins(ResistorMode mode = ResistorMode.Off, params PinId[] ids)
         {
-            foreach (var pin in pins)
-                pin.Mode = mode;
+            if (!ids.Any())
+                ids = PinId.AllValidPinIds;
+
+            CheckAlreadyInitialized(ids);
+            
+            foreach (var id in ids)
+            {
+                inputPins.Add(id, new InputPin(id, mode));
+            }
         }
 
         /// <summary>
-        /// Discovers all gpio pins, sets them all to output mode and
-        /// writes the given values to them all.
+        /// Initializes pins with the given ids for digital writing.
         /// </summary>
-        /// <param name="value"></param>
-        public GpioManager(PinValue value) : this(PinMode.Output)
+        /// <param name="value">The initial digital value of the pins.</param>
+        /// <param name="ids">Ids of the pins. If this is empty, all pins will
+        /// be initialized.</param>
+        public void InitializeOutputPins(PinValue value = PinValue.Low, params PinId[] ids)
         {
-            foreach (var pin in pins)
-                pin.Value = value;
+            if (!ids.Any())
+                ids = PinId.AllValidPinIds;
+
+            CheckAlreadyInitialized(ids);
+            
+            foreach (var id in ids)
+            {
+                outputPins.Add(id, new OutputPin(id, value));
+            }
+        }
+
+        /// <summary>
+        /// Initializes pins with the given ids for pulse width modulated writing.
+        /// </summary>
+        /// <param name="value">The initial value of the pins.</param>
+        /// <param name="range">The resolution within every pwm cycle.</param>
+        /// <param name="ids">Ids of the pins. If this is empty, all pins will
+        /// be initialized.</param>
+        public void InitializeSoftPwmPins(double value = 0.0, int range = 100, params PinId[] ids)
+        {
+            if (!ids.Any())
+                ids = PinId.AllValidPinIds;
+
+            CheckAlreadyInitialized(ids);
+
+            foreach (var id in ids)
+            {
+                softPwmPins.Add(id, new SoftPwmPin(id, value, range));
+            }
+        }
+
+        private void CheckAlreadyInitialized(IEnumerable<PinId> ids)
+        {
+            var alreadyInitialized = inputPins.Keys.Concat(outputPins.Keys).Concat(softPwmPins.Keys);
+            var falselyInitialized = ids.Intersect(alreadyInitialized);
+            if (falselyInitialized.Any())
+            {
+                throw new ArgumentException("The following pins are already initialized:\n"
+                    + String.Join("\n", falselyInitialized));
+            }
         }
     }
 }
