@@ -2,63 +2,84 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Net;
 
 namespace IoTree.Contract
 {
     public class ResponseToken
     {
-        public HttpStatusCode StatusCode { get; set; }
-
         public string Method { get; set; }
+
+        public string[] MethodParameters { get; set; }
+
+        public int ErrorCode { get; set; }
 
         public string ErrorInfo { get; set; }
 
-        public static ResponseToken Ok(string method, params string[] methodParameters)
+        public static ResponseToken Ok(string method, params object[] methodParameters)
         {
             return new ResponseToken
             {
-                Method = FormatMethod(method, methodParameters),
-                StatusCode = HttpStatusCode.OK
+                Method = method,
+                MethodParameters = methodParameters.Select(o => o.ToString()).ToArray(),
+                ErrorCode = 0
             };
         }
 
-        public static ResponseToken<T> OkData<T>(T payload, string method, params string[] methodParameters)
+        public static ResponseToken<T> OkData<T>(T payload, string method, params object[] methodParameters)
         {
             return new ResponseToken<T>
             {
-                Method = FormatMethod(method, methodParameters),
-                StatusCode = HttpStatusCode.OK,
+                Method = method,
+                MethodParameters = methodParameters.Select(o => o.ToString()).ToArray(),
+                ErrorCode = 0,
                 Payload = payload
             };
         }
 
-        public static ResponseToken Error(Exception e, string method, params string[] methodParameters)
+        public static ResponseToken Error(Exception e, string method, params object[] methodParameters)
         {
             return new ResponseToken
             {
-                Method = FormatMethod(method, methodParameters),
-                StatusCode = HttpStatusCode.InternalServerError,
+                Method = method,
+                MethodParameters = methodParameters.Select(o => o.ToString()).ToArray(),
+                ErrorCode = -1,
                 ErrorInfo = e.ToString()
             };
         }
 
-        public static ResponseToken<T> ErrorData<T>(Exception e, T payload, string method, params string[] methodParameters)
+        public static ResponseToken Error(string message, string method, params object[] methodParameters)
+        {
+            return new ResponseToken
+            {
+                Method = method,
+                MethodParameters = methodParameters.Select(o => o.ToString()).ToArray(),
+                ErrorCode = -1,
+                ErrorInfo = message
+            };
+        }
+
+        public static ResponseToken<T> ErrorData<T>(Exception e, T payload, string method, params object[] methodParameters)
         {
             return new ResponseToken<T>
             {
-                Method = FormatMethod(method, methodParameters),
-                StatusCode = HttpStatusCode.InternalServerError,
+                Method = method,
+                MethodParameters = methodParameters.Select(o => o.ToString()).ToArray(),
+                ErrorCode = -1,
                 ErrorInfo = e.ToString(),
                 Payload = payload
             };
         }
 
-        private static string FormatMethod(string method, params string[] parameters)
+        public static ResponseToken<T> ErrorData<T>(string message, T payload, string method, params object[] methodParameters)
         {
-            return method + "(" + String.Join(", ", parameters) + ")";
+            return new ResponseToken<T>
+            {
+                Method = method,
+                MethodParameters = methodParameters.Select(o => o.ToString()).ToArray(),
+                ErrorCode = -1,
+                ErrorInfo = message,
+                Payload = payload
+            };
         }
     }
 

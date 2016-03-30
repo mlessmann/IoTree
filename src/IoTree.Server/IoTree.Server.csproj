@@ -51,6 +51,9 @@
     <Compile Include="..\IoTree.Contract\IManualLedService.cs">
       <Link>ITreeService.cs</Link>
     </Compile>
+    <Compile Include="..\IoTree.Contract\LedState.cs">
+      <Link>LedState.cs</Link>
+    </Compile>
     <Compile Include="..\IoTree.Contract\ResponseToken.cs">
       <Link>ResponseToken.cs</Link>
     </Compile>
@@ -64,6 +67,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IoTree.Gpio\IoTree.Gpio.csproj">
+      <Project>{88a92877-e66b-42c3-87a4-927add3161d2}</Project>
+      <Name>IoTree.Gpio</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -52,6 +52,8 @@ namespace IoTree.Gpio
         /// <returns></returns>
         public static PinId FromPhysical(int physicalId)
         {
+            if (!IsValidPhysicalId(physicalId))
+                throw new ArgumentException(physicalId + " is not a valid gpio pin number.", "physicalId");
             var broadcomId = physicalToBroadcomMap[physicalId];
             if (broadcomId < 0)
                 throw new ArgumentException(physicalId + " is not a valid gpio pin number.", "physicalId");
@@ -59,14 +61,40 @@ namespace IoTree.Gpio
         }
 
         /// <summary>
-        /// Creates a PinId from a broadcom id. THe physical id in inferred.
+        /// Checks, if the given physical pin number can be used to access a gpio pin.
+        /// </summary>
+        /// <param name="physicalId"></param>
+        /// <returns></returns>
+        public static bool IsValidPhysicalId(int physicalId)
+        {
+            if (physicalId <= 0)
+                return false;
+            return broadcomToPhysicalMap.Contains(physicalId);
+        }
+
+        /// <summary>
+        /// Creates a PinId from a broadcom id. The physical id in inferred.
         /// </summary>
         /// <param name="broadcomId"></param>
         /// <returns></returns>
         public static PinId FromBroadcom(int broadcomId)
         {
+            if (!IsValidBroadcomId(broadcomId))
+                throw new ArgumentException(broadcomId + " is not a valid gpio pin number.", "broadcomId");
             var physicalId = broadcomToPhysicalMap[broadcomId];
             return new PinId(physicalId, broadcomId);
+        }
+
+        /// <summary>
+        /// Checks, if the given broadcom pin number can be used to access a gpio pin.
+        /// </summary>
+        /// <param name="broadcomId"></param>
+        /// <returns></returns>
+        public static bool IsValidBroadcomId(int broadcomId)
+        {
+            if (broadcomId < 0)
+                return false;
+            return physicalToBroadcomMap.Contains(broadcomId);
         }
         
         public override bool Equals(object obj)

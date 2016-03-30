@@ -1,4 +1,5 @@
 ﻿using IoTree.Contract;
+using IoTree.Gpio;
 using NLog;
 using System;
 using System.Collections.Generic;
@@ -17,9 +18,9 @@ namespace IoTree.Server
         private readonly WebServiceHost host;
         private readonly LedService singletonService;
 
-        public LedServiceHost(int port)
+        public LedServiceHost(int port, IGpioManager gpio)
         {
-            singletonService = new LedService();
+            singletonService = new LedService(gpio);
 
             var address = new Uri("http://localhost:" + port);
             logger.Debug("Creating service host on port {0}.", port);

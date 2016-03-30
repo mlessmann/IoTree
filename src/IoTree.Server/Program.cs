@@ -1,4 +1,5 @@
-﻿using NLog;
+﻿using IoTree.Gpio;
+using NLog;
 using NLog.Config;
 using NLog.Targets;
 using System;
@@ -24,7 +25,12 @@ namespace IoTree.Server
 
             try
             {
-                var host = new LedServiceHost(DefaultPort);
+                var gpio = new GpioManager();
+                logger.Debug("Gpio interface initialized.");
+                gpio.InitializeSoftPwmPins();
+                logger.Debug("Software pwm pins initialized.");
+
+                var host = new LedServiceHost(DefaultPort, gpio);
                 host.Start().Wait();
 
                 logger.Info("IoTree.Server started. Press enter to shut it down.");
