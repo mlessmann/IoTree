@@ -14,7 +14,7 @@ namespace IoTree.Contract
         [WebGet(
             ResponseFormat = WebMessageFormat.Json,
             UriTemplate = "getleds")]
-        ResponseToken<LedState[]> GetLeds();
+        ResponseToken<Dictionary<int, double>> GetLeds();
 
         [OperationContract]
         [WebGet(

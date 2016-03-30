@@ -25,22 +25,20 @@ namespace IoTree.Server
             this.gpio = gpio;
         }
 
-        public ResponseToken<LedState[]> GetLeds()
+        public ResponseToken<Dictionary<int, double>> GetLeds()
         {
             try
             {
                 logger.Debug("Received GetLeds().");
                 var data = gpio.SoftPwmPins.Values
-                    .Select(p => new LedState { Led = p.Id.BroadcomId, Value = p.Value })
-                    .OrderBy(p => p.Led)
-                    .ToArray();
+                    .ToDictionary(p => p.Id.BroadcomId, p => p.Value);
                 return ResponseToken.OkData(data, "GetLeds");
             }
             catch(Exception e)
             {
                 logger.Error(e, "GetLeds()");
                 WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.InternalServerError;
-                return ResponseToken.ErrorData<LedState[]>(e, null, "GetLeds");
+                return ResponseToken.ErrorData<Dictionary<int, double>>(e, null, "GetLeds");
             }
         }
 
