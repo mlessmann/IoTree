@@ -1,4 +1,5 @@
-﻿using IoTree.Gpio;
+﻿#if DEBUG
+using IoTree.Gpio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,3 +58,4 @@ namespace IoTree.Server
         }
     }
 }
+#endif

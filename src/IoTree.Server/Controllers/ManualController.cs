@@ -27,23 +27,19 @@ namespace IoTree.Server.Controllers
         [HttpGet]
         public IHttpActionResult GetById(int id)
         {
-            ISoftPwmPin pin;
-            if (!gpio.SoftPwmPins.TryGetValue(PinId.FromBroadcom(id), out pin))
-            {
+            if (!PinId.IsValidBroadcomId(id))
                 return NotFound();
-            }
-            return Json(pin);
+
+            return Json(gpio.SoftPwmPins[PinId.FromBroadcom(id)]);
         }
 
         [HttpGet]
         public IHttpActionResult Set(int id, double value)
         {
-            ISoftPwmPin pin;
-            if (!gpio.SoftPwmPins.TryGetValue(PinId.FromBroadcom(id), out pin))
-            {
+            if (!PinId.IsValidBroadcomId(id))
                 return NotFound();
-            }
-            pin.Value = value;
+
+            gpio.SoftPwmPins[PinId.FromBroadcom(id)].Value = value;
             return Ok();
         }
     }
