@@ -1,4 +1,5 @@
 using IoTree.Gpio;
+using IoTree.Server.Models;
 using Microsoft.Practices.Unity;
 using NLog;
 using System.Web.Http;
@@ -15,6 +16,7 @@ namespace IoTree.Server
 			var container = new UnityContainer();
 
             InitGpioManager(container);
+            container.RegisterInstance<IPatternManager>(new PatternManager(container.Resolve<IGpioManager>()));
 
             GlobalConfiguration.Configuration.DependencyResolver = new UnityDependencyResolver(container);
         }

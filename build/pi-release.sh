@@ -6,5 +6,8 @@ cd ${DIR}/../src
 nuget restore
 xbuild /p:Configuration=Release IoTree.sln
 
-cd IoTree.Server
-sudo xsp
+if [ "$1" = "run" ]
+then
+	cd IoTree.Server
+	sudo xsp
+fi

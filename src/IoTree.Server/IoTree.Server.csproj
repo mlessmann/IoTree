@@ -130,9 +130,13 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\ManualController.cs" />
+    <Compile Include="Controllers\PatternController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\IPatternManager.cs" />
+    <Compile Include="Models\PatternManager.cs" />
+    <Compile Include="Models\PatternStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

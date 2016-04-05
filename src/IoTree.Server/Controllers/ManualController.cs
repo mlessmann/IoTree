@@ -1,4 +1,5 @@
 ﻿using IoTree.Gpio;
+using IoTree.Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +12,12 @@ namespace IoTree.Server.Controllers
     public class ManualController : ApiController
     {
         private readonly IGpioManager gpio;
+        private readonly IPatternManager patternManager;
 
-        public ManualController(IGpioManager gpio)
+        public ManualController(IGpioManager gpio, IPatternManager patternManager)
         {
             this.gpio = gpio;
+            this.patternManager = patternManager;
         }
         
         [HttpGet]
@@ -39,7 +42,7 @@ namespace IoTree.Server.Controllers
             if (!PinId.IsValidBroadcomId(id))
                 return NotFound();
 
-            gpio.SoftPwmPins[PinId.FromBroadcom(id)].Value = value;
+            patternManager.SetLed(PinId.FromBroadcom(id), value);
             return Ok();
         }
     }
