@@ -10,22 +10,22 @@ namespace IoTree.Gpio.Internal
     {
         private ResistorMode resistorMode;
 
-        public PinValue Value { get { return Wpi.DigitalRead(Id.InteropId); } }
+        public PinValue Value { get { return wpi.DigitalRead(Id.InteropId); } }
 
         public ResistorMode ResistorMode
         {
             get { return resistorMode; }
             set
             {
-                Wpi.PullUpDnControl(Id.InteropId, value);
+                wpi.PullUpDnControl(Id.InteropId, value);
                 this.resistorMode = value;
             }
         }
 
-        internal InputPin(PinId id, ResistorMode resistorMode = ResistorMode.Off) : base(id)
+        internal InputPin(IWiringPiInterop wpi, PinId id, ResistorMode resistorMode = ResistorMode.Off) : base(wpi, id)
         {
             this.resistorMode = resistorMode;
-            Wpi.PinMode(id.InteropId, PinMode.Input);
+            wpi.PinMode(id.InteropId, PinMode.Input);
         }
     }
 }

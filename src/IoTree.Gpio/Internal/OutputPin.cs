@@ -10,13 +10,13 @@ namespace IoTree.Gpio.Internal
     {
         public PinValue Value
         {
-            get { return Wpi.DigitalRead(Id.InteropId); }
-            set { Wpi.DigitalWrite(Id.InteropId, value); }
+            get { return wpi.DigitalRead(Id.InteropId); }
+            set { wpi.DigitalWrite(Id.InteropId, value); }
         }
 
-        internal OutputPin(PinId id, PinValue value = PinValue.Low) : base(id)
+        internal OutputPin(IWiringPiInterop wpi, PinId id, PinValue value = PinValue.Low) : base(wpi, id)
         {
-            Wpi.PinMode(id.InteropId, PinMode.Output);
+            wpi.PinMode(id.InteropId, PinMode.Output);
             Value = value;
         }
     }

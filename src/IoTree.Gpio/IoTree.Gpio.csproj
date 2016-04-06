@@ -49,11 +49,12 @@
     <Compile Include="IOutputPin.cs" />
     <Compile Include="Internal\OutputPin.cs" />
     <Compile Include="ISoftPwmPin.cs" />
+    <Compile Include="IWiringPiInterop.cs" />
     <Compile Include="PinId.cs" />
-    <Compile Include="Internal\PinMode.cs" />
+    <Compile Include="PinMode.cs" />
     <Compile Include="PinValue.cs" />
     <Compile Include="ResistorMode.cs" />
-    <Compile Include="Internal\Wpi.cs" />
+    <Compile Include="Internal\WiringPiInterop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

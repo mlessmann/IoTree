@@ -10,6 +10,7 @@ namespace IoTree.Gpio
 {
     public class GpioManager : IGpioManager
     {
+        private readonly IWiringPiInterop wpi;
         private readonly Dictionary<PinId, IInputPin> inputPins = new Dictionary<PinId, IInputPin>();
         private readonly Dictionary<PinId, IOutputPin> outputPins = new Dictionary<PinId, IOutputPin>();
         private readonly Dictionary<PinId, ISoftPwmPin> softPwmPins = new Dictionary<PinId, ISoftPwmPin>();
@@ -32,9 +33,11 @@ namespace IoTree.Gpio
         /// <summary>
         /// Initializes the gpio interface.
         /// </summary>
-        public GpioManager()
+        /// <param name="wpi">Optional parameter for injection of interop stub.</param>
+        public GpioManager(IWiringPiInterop wpi = null)
         {
-            Wpi.SetupGpio();
+            this.wpi = wpi ?? new WiringPiInterop();
+            this.wpi.SetupGpio();
         }
 
         /// <summary>
@@ -52,7 +55,7 @@ namespace IoTree.Gpio
             
             foreach (var id in ids)
             {
-                inputPins.Add(id, new InputPin(id, mode));
+                inputPins.Add(id, new InputPin(wpi, id, mode));
             }
         }
 
@@ -71,7 +74,7 @@ namespace IoTree.Gpio
             
             foreach (var id in ids)
             {
-                outputPins.Add(id, new OutputPin(id, value));
+                outputPins.Add(id, new OutputPin(wpi, id, value));
             }
         }
 
@@ -91,7 +94,7 @@ namespace IoTree.Gpio
 
             foreach (var id in ids)
             {
-                softPwmPins.Add(id, new SoftPwmPin(id, value, range));
+                softPwmPins.Add(id, new SoftPwmPin(wpi, id, value, range));
             }
         }
 

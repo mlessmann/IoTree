@@ -9,12 +9,14 @@ namespace IoTree.Gpio.Internal
     internal abstract class BasePin
     {
         private readonly PinId id;
+        protected readonly IWiringPiInterop wpi;
 
         public PinId Id { get { return id; } }
 
-        internal BasePin(PinId id)
+        internal BasePin(IWiringPiInterop wpi, PinId id)
         {
             this.id = id;
+            this.wpi = wpi;
         }
     }
 }

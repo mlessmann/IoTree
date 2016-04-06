@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IoTree.Gpio.Internal
 {
-    internal static class Wpi
+    internal class WiringPiInterop : IWiringPiInterop
     {
         const string LibraryName = "libwiringPi.so";
 
@@ -16,7 +16,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern int wiringPiSetup();
 
-        internal static int Setup()
+        public int Setup()
         {
             return wiringPiSetup();
         }
@@ -24,7 +24,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern int wiringPiSetupGpio();
 
-        internal static int SetupGpio()
+        public int SetupGpio()
         {
             return wiringPiSetupGpio();
         }
@@ -32,7 +32,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern int wiringPiSetupPhys();
 
-        internal static int SetupPhys()
+        public int SetupPhys()
         {
             return wiringPiSetupPhys();
         }
@@ -40,7 +40,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern int wiringPiSetupSys();
 
-        internal static int SetupSys()
+        public int SetupSys()
         {
             return wiringPiSetupSys();
         }
@@ -52,7 +52,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern void pinMode(int pin, int mode);
 
-        internal static void PinMode(int pin, PinMode mode)
+        public void PinMode(int pin, PinMode mode)
         {
             pinMode(pin, (int)mode);
         }
@@ -60,7 +60,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern int getAlt(int pin);
 
-        internal static PinMode GetAlt(int pin)
+        public PinMode GetAlt(int pin)
         {
             return (PinMode)getAlt(pin);
         }
@@ -68,7 +68,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern void pullUpDnControl(int pin, int pud);
 
-        internal static void PullUpDnControl(int pin, ResistorMode mode)
+        public void PullUpDnControl(int pin, ResistorMode mode)
         {
             pullUpDnControl(pin, (int)mode);
         }
@@ -76,7 +76,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern void digitalWrite(int pin, int value);
 
-        internal static void DigitalWrite(int pin, PinValue value)
+        public void DigitalWrite(int pin, PinValue value)
         {
             digitalWrite(pin, (int)value);
         }
@@ -84,7 +84,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern int digitalRead(int pin);
 
-        internal static PinValue DigitalRead(int pin)
+        public PinValue DigitalRead(int pin)
         {
             return (PinValue)digitalRead(pin);
         }
@@ -96,7 +96,7 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern int softPwmCreate(int pin, int initialValue, int pwmRange);
 
-        internal static void SoftPwmCreate(int pin, int initialValue, int pwmRange)
+        public void SoftPwmCreate(int pin, int initialValue, int pwmRange)
         {
             softPwmCreate(pin, initialValue, pwmRange);
         }
@@ -104,21 +104,9 @@ namespace IoTree.Gpio.Internal
         [DllImport(LibraryName)]
         private static extern int softPwmWrite(int pin, int value);
 
-        internal static void SoftPwmWrite(int pin, int value)
+        public void SoftPwmWrite(int pin, int value)
         {
             softPwmWrite(pin, value);
-        }
-
-        #endregion
-
-        #region Utility
-
-        [DllImport(LibraryName)]
-        private static extern int piBoardRev();
-
-        internal static int PiBoardRev()
-        {
-            return piBoardRev();
         }
 
         #endregion

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IoTree.Gpio.Internal
+namespace IoTree.Gpio
 {
-    internal enum PinMode : int
+    public enum PinMode : int
     {
         /// <summary>
         /// Specifies a pin used for reading incoming signals.
